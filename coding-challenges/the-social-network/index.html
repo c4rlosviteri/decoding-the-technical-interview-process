@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Shadows+Into+Light&display=swap"
+      rel="stylesheet"
+    />
+    <title>The Social Network</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Shadows Into Light", cursive;
+      }
+
+      .users-list {
+        display: grid;
+        gap: 20px;
+        justify-content: center;
+        margin: 0;
+        padding: 0;
+      }
+
+      .users-list__item {
+        align-items: center;
+        box-shadow: 0 0 0 3px salmon;
+        display: flex;
+        font-size: 20px;
+        padding: 20px;
+        width: 300px;
+      }
+
+      .users-list__item img {
+        border-radius: 999px;
+        margin-right: 20px;
+        height: 80px;
+        width: 80px;
+      }
+    </style>
+  </head>
+  <body>
+    <ul id="users-list" class="users-list"></ul>
+    <script>
+      const API_URL = "https://randomuser.me/api/?results=10";
+      const usersList = document.querySelector("#users-list");
+
+      async function fetchUsers() {
+        const data = await fetch(API_URL).then((blob) => blob.json());
+        return data;
+      }
+
+      async function renderUsers() {
+        const { results } = await fetchUsers();
+
+        const resultsHtml = results
+          .map((user) => {
+            const name = `${user.name.first} ${user.name.last}`;
+            const imgSrc = user.picture.large;
+
+            return `
+              <li class="users-list__item">
+                <img src="${imgSrc}" alt="${name}" />
+                <p>${name}</p>
+              </li>
+            `;
+          })
+          .join("");
+
+        usersList.innerHTML = resultsHtml;
+      }
+
+      renderUsers();
+    </script>
+  </body>
+</html>
